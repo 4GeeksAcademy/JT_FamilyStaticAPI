@@ -40,18 +40,35 @@ def handle_hello():
 @app.route('/members', methods=['POST'])
 def new_member():
     data = request.json
+
+    if not data:
+        return jsonify({"Message": "Datos incorrectos"}), 400
+
     response = jackson_family.add_member(data)
 
-    return jsonify(response)
+    return jsonify(response), 200
 
 
-@app.route('/members', methods=['DELETE'])
-def delete_member():
-    member_id  = request.json.get("id")
-    response = jackson_family.delete_member(member_id)
+@app.route('/members/<int:id>', methods=['DELETE'])
+def delete_member(id):
 
-    return jsonify(response)
+    response = jackson_family.delete_member(id)
 
+    if response == {"Message": "No se encontró ningún miembro con ese id"}:
+        return jsonify(response), 404
+
+    return jsonify(response), 200
+
+
+@app.route('/members/<int:id>', methods=['GET'])
+def info_familymember(id):
+
+    info_family_member = jackson_family.get_member(id)
+
+    if info_family_member is None:
+        return jsonify({"Message": "No se encontró ningún miembro con ese id"}), 404
+
+    return jsonify(info_family_member), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
