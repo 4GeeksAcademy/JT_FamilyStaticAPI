@@ -45,6 +45,14 @@ def new_member():
     return jsonify(response)
 
 
+@app.route('/members', methods=['DELETE'])
+def delete_member():
+    member_id  = request.json.get("id")
+    response = jackson_family.delete_member(member_id)
+
+    return jsonify(response)
+
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))

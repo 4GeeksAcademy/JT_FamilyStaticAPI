@@ -57,8 +57,12 @@ class FamilyStructure:
         return new_member
 
     def delete_member(self, id):
-        # fill this method and update the return
-        pass
+        for member in self._members:
+            if member.get('id') == id:
+                self._members.remove(member)
+                return {"Message":"Ok"}
+        return {"Message":"No se encontró ningún miembro con ese id"}
+
 
     def get_member(self, id):
         # fill this method and update the return
